@@ -1,5 +1,6 @@
 import requests,json,re
 import page as pg
+
 #regex to remove wiki namespaces(organizational pages)
 #list of namespaces: https://en.wikipedia.org/w/api.php?action=query&meta=siteinfo&siprop=namespaces
 regex = re.compile("(Media|Special|Talk|User|User talk|Wikipedia|Wikipedia talk|File|File talk|MediaWiki| \
@@ -7,7 +8,12 @@ MediaWiki talk|Template|Template talk|Help|Help talk|Category|Category talk|Port
 Book talk|Draft|Draft talk|Education Program|Education Program talk|TimedText|TimedText talk|Module| \
 Module talk|Gadget|Gadget talk|Gadget definition|Gadget definition talk)(?=:)")
 
+#query for random page
 randomQuery = "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&explaintext=true&format=json"
+
+#search query in category
+searchQuery = "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=%s+incategory:%s"
+
 #used for dictionaries with arbitrary key
 #input: dictionary
 #return: value of next key in a dictionary
@@ -25,7 +31,7 @@ def remNamespace(links):
     return filteredLinks
 
 #returns JSON of query for random wikipedia page
-def wikiJSON(query):
+def wikiJSON(query=randomQuery):
     response = requests.get(query)
     page = response.json()
     return page
@@ -40,15 +46,23 @@ def getDescr(page):
     descr = getNextVal(page["query"]["pages"])["extract"]
     return descr
 
+#search category for pageTitle, default category is disambiguation pages
+def searchCategory(pageTitle,category="All_disambiguation_pages"):
+    result = wikiJSON(searchQuery%(pageTitle,category))
+    result= result["query"]["search"]
+    if not result:
+        return False
+    else:
+        return result[0]["title"] == pageTitle
+
 #create start and end pages to store in Page class
-def initPages(query):
-    start = wikiJSON(query)
-    end = wikiJSON(query)
-    while(getTitle(start)==getTitle(end)):
-        end = wikiJSON(query)
+def initPages():
+    start = wikiJSON()
+    end = wikiJSON()
+    #start and end pages sohuld be different and shouldn't be disambiguation pages
+    while(searchCategory(getTitle(start)) or searchCategory(getTitle(end)) and getTitle(start)==getTitle(end)):
+        start = wikiJSON()
+        end = wikiJSON()
     startPage = pg.Page(getTitle(start),getDescr(start),remNamespace(getLinks(start)))
     endPage = pg.Page(getTitle(end),getDescr(end),remNamespace(getLinks(end)))
     return (startPage,endPage)
-
-#test=wikiJSON("https://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:All%20disambiguation%20pages&format=json")
-#print(test["query"]["categorymembers"][0]["title"])
