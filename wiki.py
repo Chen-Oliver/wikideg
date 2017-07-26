@@ -9,7 +9,7 @@ Book talk|Draft|Draft talk|Education Program|Education Program talk|TimedText|Ti
 Module talk|Gadget|Gadget talk|Gadget definition|Gadget definition talk)(?=:)")
 
 #query for random page
-randomQuery = "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&explaintext=true&format=json"
+randomQuery = "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&exsentences=1&explaintext=true&format=json"
 
 #search query in category
 searchQuery = "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=%s+incategory:%s"
