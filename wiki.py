@@ -9,8 +9,8 @@ Book talk|Draft|Draft talk|Education Program|Education Program talk|TimedText|Ti
 Module talk|Gadget|Gadget talk|Gadget definition|Gadget definition talk)(?=:)")
 
 #query for random page
-randomQuery = "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&exsentences=1&explaintext=true&format=json"
-
+randomQuery = "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&exsentences=2&explaintext=true&format=json"
+continueQuery= "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&plcontinue=%s&exintro=1&exsentences=2&explaintext=true&format=json"
 #search query in category
 searchQuery = "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=%s+incategory:%s"
 
@@ -41,13 +41,15 @@ def getTitle(page):
     return title
 def getLinks(page):
     links = getNextVal(page["query"]["pages"])["links"]
-    return links
+    return remNamespace(links)
 def getDescr(page):
     descr = getNextVal(page["query"]["pages"])["extract"]
     return descr
 
+#pages in these categories are not actual articles
+bad_categories = ["All_article_disambiguation_pages","Surnames","Lists_of_lists"]
 #search category for pageTitle, default category is disambiguation pages
-def searchCategory(pageTitle,category="All_disambiguation_pages"):
+def searchCategory(pageTitle,category):
     result = wikiJSON(searchQuery%(pageTitle,category))
     result= result["query"]["search"]
     if not result:
@@ -60,9 +62,10 @@ def initPages():
     start = wikiJSON()
     end = wikiJSON()
     #start and end pages sohuld be different and shouldn't be disambiguation pages
-    while(searchCategory(getTitle(start)) or searchCategory(getTitle(end)) and getTitle(start)==getTitle(end)):
-        start = wikiJSON()
-        end = wikiJSON()
-    startPage = pg.Page(getTitle(start),getDescr(start),remNamespace(getLinks(start)))
-    endPage = pg.Page(getTitle(end),getDescr(end),remNamespace(getLinks(end)))
+    for category in bad_categories:
+        while(searchCategory(getTitle(start),category) or searchCategory(getTitle(end),category) or getTitle(start)==getTitle(end)):
+            start = wikiJSON()
+            end = wikiJSON()
+    startPage = pg.Page(getTitle(start),getDescr(start),getLinks(start))
+    endPage = pg.Page(getTitle(end),getDescr(end),getLinks(end))
     return (startPage,endPage)
