@@ -10,7 +10,7 @@ Module talk|Gadget|Gadget talk|Gadget definition|Gadget definition talk)(?=:)")
 
 #query for random page
 randomQuery = "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&exsentences=2&explaintext=true&format=json"
-continueQuery= "https://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&explaintext=true&prop=extracts|links&pllimit=500&plcontinue=%s&exintro=1&exsentences=2&explaintext=true&format=json"
+continueQuery= "https://en.wikipedia.org/w/api.php?action=query&titles=%s&explaintext=true&prop=extracts|links&pllimit=500&plcontinue=%s&exintro=1&exsentences=2&explaintext=true&format=json"
 #search query in category
 searchQuery = "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=%s+incategory:%s"
 
@@ -21,14 +21,10 @@ def getNextVal(d):
     return next(iter(d.values()),{"extract":"No page text found."})
 
 #removes namespace links
-#input: list of wiki links
-#return list of non-namespace link titles
-def remNamespace(links):
-    filteredLinks=[]
+def remNamespace(filteredLinks,links):
     for link in links:
         if not regex.search(link["title"]):
             filteredLinks.append(link["title"])
-    return filteredLinks
 
 #returns JSON of query for random wikipedia page
 def wikiJSON(query=randomQuery):
@@ -40,8 +36,14 @@ def getTitle(page):
     title = getNextVal(page["query"]["pages"])["title"]
     return title
 def getLinks(page):
+    filteredLinks = []
     links = getNextVal(page["query"]["pages"])["links"]
-    return remNamespace(links)
+    remNamespace(filteredLinks,links)
+    while(("continue" in page) and ("plcontinue" in page["continue"])):
+        page = wikiJSON(continueQuery%(getTitle(page),page["continue"]["plcontinue"]))
+        links = getNextVal(page["query"]["pages"])["links"]
+        remNamespace(filteredLinks,links)
+    return filteredLinks
 def getDescr(page):
     descr = getNextVal(page["query"]["pages"])["extract"]
     return descr
