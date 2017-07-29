@@ -17,20 +17,27 @@ def hello():
     global pathHist
     if request.method == "POST":
         submitValue = request.form.get("submit")
-        if submitValue== "new":
-            pageTup = wiki.initPages()
-            startPage=pageTup[0]
-            copy = deepcopy(pageTup)
-            currPage=copy[0]
-            endPage=pageTup[1]
-        elif submitValue==endPage.title:
+        if submitValue==endPage.title:
             return render_template("win.html")
         else:
             nextPage = wiki.wikiJSON("https://en.wikipedia.org/w/api.php?action=query&titles=%s&explaintext=true&prop=extracts|links&pllimit=500&exintro=1&exsentences=3&explaintext=true&format=json"%(submitValue,))
             currPage.title = wiki.getTitle(nextPage)
             currPage.description = wiki.getDescr(nextPage)
             currPage.links = wiki.getLinks(nextPage)
-            return render_template("index.html",start=startPage,curr=currPage,end=endPage)
+    elif request.method == "GET":
+        submitValue = request.args.get("submit")
+        searchValue = request.args.get("search")
+        if submitValue== "new":
+            pageTup = wiki.initPages()
+            startPage=pageTup[0]
+            copy = deepcopy(pageTup)
+            currPage=copy[0]
+            endPage=pageTup[1]
+        elif submitValue == "restart":
+            currPage.title = startPage.title
+            currPage.description=startPage.description
+            currPage.links=startPage.links
+
     return render_template("index.html",start=startPage,curr=currPage,end=endPage)
 
 if __name__ == '__main__':

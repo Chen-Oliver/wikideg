@@ -11,10 +11,35 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </head>
 <body>
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Degrees of Wikipedia</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <form action="/" method="GET">
+              <button type="submit" name="submit" class="btn btn-info" value="new">New Game</button>
+          </form>
+        </li>
+        <li class="nav-item active">
+          <form action="/" method="GET">
+              <button type="submit" name="submit" class="btn btn-info" value="restart">Restart</button>
+          </form>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input id="search" name="search" class="form-control mr-sm-2" type="text"onKeyPress="filterlinks()" onKeyUp="filterlinks()" placeholder="Search">
+       <!--button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button-->
+      </form>
+    </div>
+  </nav>
 <div class="container">
   <div class="row" id="startend">
     <div class="col-md-4">
-      <button type="button" class="btn btn-secondary btn-sm" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{start.description}}">
+      <button type="button" class="btn btn-secondary btn-md" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{start.description}}">
         {{start.title}}
       </button>
     </div>
@@ -24,21 +49,25 @@
       </button>
     </div>
     <div class="col-md-4">
-      <button type="button" class="btn btn-secondary btn-sm" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{end.description}}">
+      <button type="button" class="btn btn-secondary btn-md" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{end.description}}">
         {{end.title}}
       </button>
     </div>
 <form action="/" method="POST" >
     {% for link in curr.links%}
-      <button type="submit" name="submit" class="btn btn-link" value="{{link}}">{{link}}</button>
+      <button id="{{link}}" type="submit" name="submit" class="btn btn-link" value="{{link}}">{{link}}</button>
     {% endfor %}
 </form>
   </div>
 </div>
-<script>
+<script type="text/javascript">
   $(document).ready(function(){
       $('[data-toggle="popover"]').popover();
   });
+  function filterlinks(){
+    var sval = document.getElementById("search").value;
+    console.log(""+sval);
+  }
 </script>
 </body>
 </html>
