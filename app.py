@@ -1,20 +1,17 @@
 from flask import Flask,render_template,request
 import wiki
 from copy import deepcopy
-
+import page as pg
 app = Flask(__name__)
 pageTup = wiki.initPages()
 startPage=pageTup[0]
-copy = deepcopy(pageTup)
-currPage=copy[0]
+currPage=pg.Page(startPage.title,startPage.description,startPage.links)
 endPage=pageTup[1]
-pathHist=[startPage.title]
 @app.route("/",methods=['GET', 'POST'])
 def hello():
     global currPage
     global startPage
     global endPage
-    global pathHist
     if request.method == "POST":
         submitValue = request.form.get("submit")
         if submitValue==endPage.title:
