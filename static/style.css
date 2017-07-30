@@ -1,0 +1,11 @@
+#startend{
+  text-align: center;
+}
+.btn{
+    white-space:normal !important;
+    word-wrap: break-word;
+    word-break: normal;
+}
+.popover{
+    max-width: 100%;
+}
