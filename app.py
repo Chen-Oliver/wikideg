@@ -2,6 +2,7 @@ from flask import Flask,render_template,request
 import wiki
 from copy import deepcopy
 import page as pg
+import os
 app = Flask(__name__)
 pageTup = wiki.initPages()
 startPage=pageTup[0]
