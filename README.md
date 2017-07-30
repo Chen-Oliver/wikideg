@@ -5,6 +5,10 @@ Try to reach one wikipedia page starting from another.
 Requirements:
 -Python3
 -Flask 
-''' pip3 install flask '''
+''' 
+pip3 install flask 
+'''bash
 -requests
-'''pip3 install requests'''
+'''bash
+pip3 install requests
+'''
