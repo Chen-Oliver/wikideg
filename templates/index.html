@@ -31,7 +31,7 @@
         </li>
         <li>
           <button type="button" class="btn btn-info" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="The purpose of this game is to reach one wikipedia page from another. 1)The starting and ending page are on the sides and the current page is in the middle(hover over them to get descriptions).
-          2)Press the links to move to a new page and use the back button to return to previous page.
+          2)Press the links to move to a new page.
           3)Type in the search bar to filter through the links.
           4)The 'new game' button creates new start and end points.
           5)The 'restart' button moves you back to the start page">
@@ -62,7 +62,6 @@
         {{end.title}}
       </button>
     </div>
- <div class="change-message">You have unsaved changes.</div>
 <form action="/" method="POST" >
     {% for link in curr.links%}
       <button id="links" type="submit" name="submit" class="btn btn-link" value="{{link}}">{{link}}</button>
@@ -93,12 +92,12 @@
     var devtoolsOpen = false;
     element.__defineGetter__("id", function() {
       devtoolsOpen = true; // This only executes when devtools is open.
-      window.location.replace("https://en.wikipedia.org/wiki/Cheating_in_video_games");
+      window.location.replace("https://github.com/Chen-Oliver/wikideg");
       });
       setInterval(function() {
           devtoolsOpen = false;
           console.log(element)
-        }, 1000);*/
+        }, 1000);
   </script>
 </body>
 </html>
