@@ -62,9 +62,10 @@
         {{end.title}}
       </button>
     </div>
+ <div class="change-message">You have unsaved changes.</div>
 <form action="/" method="POST" >
     {% for link in curr.links%}
-      <button id="{{link}}" type="submit" name="submit" class="btn btn-link" value="{{link}}">{{link}}</button>
+      <button id="links" type="submit" name="submit" class="btn btn-link" value="{{link}}">{{link}}</button>
     {% endfor %}
 </form>
   </div>
@@ -73,6 +74,8 @@
   $(function(){
       $('[data-toggle="popover"]').popover();
   });
+  var linkbuttons = document.getElementsByClassName("btn btn-link");
+  var i;
   function filterlinks(){
     var sval = document.getElementById("search").value.toString();
     var links =  document.getElementsByClassName("btn btn-link");
@@ -81,10 +84,21 @@
       for (i = 0; i < links.length; i++) {
         links[i].style.display="inline-block";
          var n = (links[i].value).search(regex);
-         console.log(n);
+         //console.log(n);
          if(n==-1) links[i].style.display="none";
        }
   }
-</script>
+  //edited snippet of https://stackoverflow.com/questions/42193700/detect-when-inspect-element-is-open
+    var element = new Image;
+    var devtoolsOpen = false;
+    element.__defineGetter__("id", function() {
+      devtoolsOpen = true; // This only executes when devtools is open.
+      window.location.replace("https://en.wikipedia.org/wiki/Cheating_in_video_games");
+      });
+      setInterval(function() {
+          devtoolsOpen = false;
+          console.log(element)
+        }, 1000);*/
+  </script>
 </body>
 </html>

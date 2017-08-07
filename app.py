@@ -9,7 +9,7 @@ startPage=pageTup[0]
 currPage=pg.Page(startPage.title,startPage.description,startPage.links)
 endPage=pageTup[1]
 @app.route("/",methods=['GET', 'POST'])
-def hello():
+def index():
     global currPage
     global startPage
     global endPage
@@ -39,5 +39,6 @@ def hello():
     return render_template("index.html",start=startPage,curr=currPage,end=endPage)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #port = int(os.environ.get('PORT', 5000))
+    #app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)

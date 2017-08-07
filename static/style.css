@@ -9,3 +9,6 @@
 .popover{
     max-width: 100%;
 }
+.change-message {
+    display: none;
+}
