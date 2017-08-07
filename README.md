@@ -2,7 +2,7 @@
 
 Try to reach one wikipedia page starting from another.
 
-WARNING: To prevent cheating, opening inspect element will redirect to this repo
+**WARNING**: To prevent cheating, opening inspect element will redirect to this repo
 
 [Heroku App](https://wikidegrees.herokuapp.com)
 
